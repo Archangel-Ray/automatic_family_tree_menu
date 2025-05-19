@@ -5,8 +5,8 @@ class MenuName(models.Model):
     name = models.CharField(unique=True)
 
     class Meta:
-        verbose_name = 'Меню'
-        verbose_name_plural = 'Меню'
+        verbose_name = 'Название меню'
+        verbose_name_plural = 'Названия меню'
 
     def __str__(self):
         return self.name
