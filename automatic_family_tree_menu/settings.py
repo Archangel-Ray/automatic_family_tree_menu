@@ -55,7 +55,9 @@ ROOT_URLCONF = 'automatic_family_tree_menu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR/'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
