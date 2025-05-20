@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class DisplayTheEntireSite(TemplateView):
+    template_name = 'the_menu_app/index.html'
