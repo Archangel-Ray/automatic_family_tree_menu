@@ -1,7 +1,7 @@
 <ul>
     {% for point in menu %}
         <li>
-            {{ point.point }}
+            <a href="?{{ point.menu }}={{ point.id }}">{{point.point}}</a>
         </li>
     {% endfor %}
 </ul>
