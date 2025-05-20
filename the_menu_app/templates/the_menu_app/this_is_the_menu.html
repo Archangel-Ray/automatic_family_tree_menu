@@ -3,5 +3,8 @@
         <li>
             <a href="?{{ point.menu }}={{ point.id }}">{{point.point}}</a>
         </li>
+        {% if point.submenu %}
+            {% include 'the_menu_app/this_is_the_menu.html' with menu=point.submenu %}
+        {% endif %}
     {% endfor %}
 </ul>
