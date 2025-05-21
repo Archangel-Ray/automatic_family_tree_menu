@@ -24,25 +24,37 @@ def create_list_of_sublevel(all_menu_points, above=None):
 
 @register.inclusion_tag('the_menu_app/this_is_the_menu.html', takes_context=True)
 def draw_menu(context, menu_name):
-    current_menu = MenuName.objects.get(name=menu_name).points.all()
-    upper_level = create_list_of_sublevel(current_menu)
+    """
+    Функция формирует списки всех уровней меню до указанного текущим и возвращает всё меню в шаблон.
+    """
+    current_menu = MenuName.objects.get(name=menu_name).points.all()  # все пункты указанного меню
+    upper_level = create_list_of_sublevel(current_menu)  # верхний уровень меню
+
+    # список текущего уровня с деревом по основному стволу в глубину
+    # до того уровня, который был выбран самым нижним
     family_tree = []
-    if menu_name in context.request.GET:
-        current_point = current_menu.get(id=context.request.GET[menu_name])
-        submenu = create_list_of_sublevel(current_menu,current_point)
+    if menu_name in context.request.GET:  # проверяет запрос: указано ли конкретное меню
+        current_point = current_menu.get(id=context.request.GET[menu_name])  # текущий пункт меню из запроса
+        submenu = create_list_of_sublevel(current_menu,current_point)  # подпункты текущего пункта
+        # добавляет в список с деревом текущий пункт с его подуровнем
         family_tree.append({'current_point': current_point, 'submenu': submenu})
 
-        while family_tree[0]['current_point'].above:
-            current_point = family_tree[0]['current_point'].above
-            submenu = create_list_of_sublevel(current_menu, current_point)
-            for current_level_point in submenu:
+        while family_tree[0]['current_point'].above:  # работает пока у текущего пункта есть уровень над ним
+            current_point = family_tree[0]['current_point'].above  # пункт над предыдущим пунктом по дереву
+            submenu = create_list_of_sublevel(current_menu, current_point)  # пункты текущего уровня
+            for current_level_point in submenu:  # проход по пунктам текущего уровня
                 if current_level_point['current_point'] == family_tree[0]['current_point']:
+                    # находит пункт над предыдущим в текущем уровнем и добавляет ему всё дерево подпунктов
                     current_level_point['submenu'] = family_tree[0]['submenu']
-            family_tree.clear()
+            family_tree.clear()  # стирает из переменной ссылку на дерево, она останется только в нужном пункте меню
+            # теперь в этот список сохраняется всё дерево с надстроенным уровнем
             family_tree.append({'current_point': current_point, 'submenu': submenu})
 
-        for upper_level_point in upper_level:
+        for upper_level_point in upper_level:  # проход по верхнему уровню
             if upper_level_point['current_point'] == family_tree[0]['current_point']:
+                # находит пункт, где начинается ветвление и добавляет ему всё дерево
                 upper_level_point['submenu'] = family_tree[0]['submenu']
 
+    # возвращается только верхний уровень если меню не указано.
+    # Если указано, то всё дерево.
     return {'menu': upper_level}
