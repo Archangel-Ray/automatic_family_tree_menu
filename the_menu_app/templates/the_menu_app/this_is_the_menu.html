@@ -1,7 +1,7 @@
 <ul>
     {% for point in menu %}
         <li>
-            <a href="?{{ point.current_point.menu }}={{ point.current_point.id }}">{{point.current_point.point}}</a>
+            <a href="?{{ menu_name }}={{ point.id }}">{{point.point}}</a>
         </li>
         {% if point.submenu %}
             {% include 'the_menu_app/this_is_the_menu.html' with menu=point.submenu %}
