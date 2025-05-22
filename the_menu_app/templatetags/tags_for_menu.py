@@ -1,6 +1,6 @@
 from django import template
 
-from ..models import MenuPoint, MenuName
+from ..models import MenuName
 
 register = template.Library()
 
