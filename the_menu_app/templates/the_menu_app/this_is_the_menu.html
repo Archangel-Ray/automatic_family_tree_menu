@@ -1,8 +1,10 @@
 <ul>
+    <!--проход пунктам-->
     {% for point in menu %}
         <li>
             <a href="?{{ menu_name }}={{ point.id }}">{{point.point}}</a>
         </li>
+        <!--если у пункта есть подуровни подключаем этот шаблон и передаём список с деревом его подуровней-->
         {% if point.submenu %}
             {% include 'the_menu_app/this_is_the_menu.html' with menu=point.submenu %}
         {% endif %}
